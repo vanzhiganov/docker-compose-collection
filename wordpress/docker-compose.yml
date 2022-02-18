@@ -1,0 +1,38 @@
+version: '3.3'
+services:
+  wp_app:
+    image: wordpress:latest
+    environment:
+      WORDPRESS_DB_HOST: wp_db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_USER: wordpress
+    ports:
+     - 8000:80
+    volumes:
+     - wp_app_data:/var/www/html
+    networks:
+     - default
+    logging:
+      driver: json-file
+  wp_db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_USER: wordpress
+    volumes:
+     - wp_db_data:/var/lib/mysql
+    networks:
+     - default
+    logging:
+      driver: json-file
+networks:
+  default:
+    driver: overlay
+volumes:
+  wp_app_data:
+    driver: local
+  wp_db_data:
+    driver: local
