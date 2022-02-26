@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  registy:
+    image: registry:2
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Realm
+    ports:
+     - 9199:5000
+    volumes:
+     - registry-reg:/var/lib/registry
+     - registry-cer:/certs
+     - registry-aut:/auth
+  registy-postconfig:
+    image: httpd:2
+    command:
+     - sh
+     - -c
+     - rm -f /auth/htpasswd && htpasswd -Bbc /auth/htpasswd {{ REGISTRY_LOGIN }} {{ REGIDTRY_PASSWORD }}
+    volumes:
+     - registry-aut:/auth
+volumes:
+  registry-aut: {}
+  registry-cer: {}
+  registry-reg: {}
