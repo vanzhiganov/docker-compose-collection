@@ -8,6 +8,6 @@ services:
       - data:/var/solr
     command:
       - solr-precreate
-      - gettingstarted
+      - "{{ name }}"
 volumes:
-  data:
+  data: {}
